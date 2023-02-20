@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/png" href="./img/logo.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./styles.css">
+    <title>visit cards</title>
+</head>
+<body>
+<div class="container-xxl">
+    <header class="header container mx-auto row align-items-center border-bottom">
+        <a href="#" class="logo col align-items-center " style="text-decoration: none">
+            <span id="boot-icon" class="bi bi-plus"
+                  style="font-size: 58px; color:  #0d6efd; -webkit-text-stroke-width: 9.3px;"></span>
+            <span class='align-items-center'
+                  style="font-size: 2rem; font-weight: bold; color: #0d6efd;"> Visit Cards </span>
+        </a>
+        <button type="button" class="header-btn btn btn-primary " id='login-btn'>Login</button>
+        <button type="button" class="header-btn btn btn-primary d-none" id='logout-btn'>Log Out</button>
+        <button type="button" class="header-btn btn btn-outline-success d-none" id='create-btn'>+ Add visit</button>
+    </header>
+    <main class="main">
+        <form class="filter container row mx-auto justify-content-center d-none" id = 'filter'>
+            <div class="col-xs-12 col-md-4 col-lg-4">
+                <div class="input-group pb-1 pt-1">
+                    <span class="input-group-text">&#128269</span>
+                    <div class="form-floating">
+                        <input type="text" class="title-search form-control" id="floatingSearchTitle"
+                               placeholder="example">
+                        <label for="floatingSearchTitle">Search by title</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="input-group col-xs-12 col-md-4 pb-1 pt-1">
+                    <select class="status-search form-select col" id="status" aria-label="select">
+                        <option selected disabled hidden>Status</option>
+                        <option>All</option>
+                        <option>Open</option>
+                        <option>Done</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="input-group col-xs-12 col-md-4 pb-1 pt-1">
+                    <select class="status-search form-select col" id="importance" aria-label="select">
+                        <option selected disabled hidden>Importance</option>
+                        <option>All</option>
+                        <option>High</option>
+                        <option>Normal</option>
+                        <option>Low</option>
+                    </select>
+                </div>
+
+            </div>
+            <button type="button" class="header-btn btn btn-outline-success align-self-center col-xs-12 mt-3 mt-xl-0" id='show-all'>Show all</button>
+        </form>
+        <h2 class="text-primary text-center" id = "loginText">Please login for work with Visit Cards</h2>
+        <ul id="root" class="container-fluid row gap-1 m-auto d-none">
+            <li class="text-muted"><h2 class="text-center"> No items have been added...</h2></li>
+        </ul>
+    </main>
+</div>
+<!-- Modal-Login -->
+<div class="modal-window modal-window--login" id="modalLogin">
+    <a href="#" class="logo col align-items-center " style="text-decoration: none">
+                <span class="bi bi-plus"
+                      style="font-size: 58px; color:  #0d6efd; -webkit-text-stroke-width: 9.3px;"></span>
+        <span class='align-items-center' style="font-size: 2rem; font-weight: bold; color: #0d6efd;"> Visit Cards </span>
+    </a>
+    <form class="login-form">
+        <h2 class="h3 mb-3 fw-normal">Please Login</h2>
+
+        <div class="form-floating">
+            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
+            <label for="floatingInput">Email address</label>
+        </div>
+        <div class="form-floating">
+            <input type='password' class="form-control" id="floatingPassword" placeholder="Password" required>
+            <label for="floatingPassword">Password</label>
+            <div class="invalid-feedback d-none">
+                Incorrect email or password
+            </div>
+        </div>
+        <div class="col btn-wrapper ">
+            <button class="btn btn-lg btn-secondary" type="button" id="return-login">Return</button>
+            <button class=" btn btn-lg btn-primary" type="submit"
+                    style="padding-left: 40px; padding-right: 40px" id="submit-login">Login
+            </button>
+
+        </div>
+    </form>
+</div>
+<!-- Modal-Visit -->
+<div class="modal-window modal-window--visit" id="modalVisit">
+    <div class = 'modal-window__content-wrapper'>
+        <span class="close align-self-end" id = 'closeBtn'>&times;</span>
+    <a href="#" class="logo align-items-center align-self-center" style="text-decoration: none">
+                <span class="bi bi-plus"
+                      style="font-size: 58px; color:  #0d6efd; -webkit-text-stroke-width: 9.3px;"></span>
+        <span class='align-items-center' style="font-size: 2rem; font-weight: bold; color: #0d6efd;"> Visit Cards </span>
+    </a>
+        <div class="col-xs-12 col-md-4 align-self-center">
+            <div class="input-group col-xs-12 col-md-4">
+                <select class="form-select col" id = 'selectDoctor' aria-label="select">
+                    <option selected disabled hidden>Choose the doctor</option>
+                    <option>Cardiologist</option>
+                    <option>Dentist</option>
+                    <option>Therapist</option>
+                </select>
+            </div>
+        </div>
+        </div>
+</div>
+
+<template class="card-template" >
+    <!--    Загальні стилі для карток-->
+    <li class="card col-xs-12 col-sm-5 col-lg-3 card-body align-self-start" draggable="true">
+        <div class="row mb-3">
+            <h5 class="card__name card-title col-11"></h5>
+            <button type="button" class="btn-close col" aria-label="Close"></button>
+        </div>
+        <h6 class="card__doctor card-subtitle mb-3 text-muted"></h6>
+        <button type="button" class="card__show-more btn btn-outline-dark">Show more</button>
+        <select class="card__select card__select--hidden form-select mb-3" aria-label="select">
+            <option selected value="OPEN">Visit status: Open</option>
+            <option value="DONE">Visit status: Done</option>
+        </select>
+        <p class="card__purpose card__content card__content--hidden card-text mb-3"></p>
+        <p class="card__importance card__content card__content--hidden card-text mb-3"></p>
+        <p class="card__description card__content card__content--hidden card-text mb-3"></p>
+        <button type="button" class="card__edit card__edit--hidden btn btn-outline-dark">Edit</button>
+        <button type="button" class="card__hide card__hide--hidden btn btn-outline-primary mt-2">Hide</button>
+    </li>
+</template>
+    <!--    Загальні стилі для форми візитів-->
+<template class="form-template">
+    <form id = 'visit-form' class="visit-form">
+        <div class="form-group row">
+            <label for="visitImportanse" class="col-sm-2 col-form-label">Visit Importance</label>
+            <div class="col-sm-10">
+                <select class="form-select col" name = "Visit Importance" aria-label="select" id ='visitImportanse'>
+                    <option>High</option>
+                    <option>Normal</option>
+                    <option>Low</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id = "closeForm" >Close</button>
+            <button type="submit" class="btn btn-primary" style="margin-left: 10px" id = 'submitForm'>Save changes</button>
+        </div>
+    </form>
+</template>
+<!--Sortable modul-->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="./js/main.js" type="module"></script>
+</body>
+</html>
